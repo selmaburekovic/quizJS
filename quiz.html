@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QUIZ exercise</title>
+    <style>
+      h1 {
+        color: black;
+        background-color: #007eed;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+      }
+      body {
+        background-color: #dba9ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>QUIZ</h1>
+    <div id="selma"></div>
+    <button id="answers">Submit</button>
+    <script>
+      fetch("quiz.json")
+        .then(function (response) {
+          if (!response.ok) {
+            throw error("error while reading the file");
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          console.log(data);
+          displayingQuiz(data);
+        })
+        .catch(function (err) {
+          console.error("Error:" + err.message);
+        });
+
+      function displayingQuiz(quiz) {
+        let mainContainer = document.getElementById("selma");
+
+        for (let i = 1; i <= Object.keys(quiz.quiz).length; i++) {
+          let heading = document.createElement("h2");
+
+          heading.innerHTML = quiz.quiz["q" + i].question;
+          mainContainer.appendChild(heading);
+
+          for (let j = 0; j < quiz.quiz["q" + i].options.length; j++) {
+            let input = document.createElement("input");
+            input.setAttribute("type", "radio");
+            input.setAttribute("name", "radioOne");
+            mainContainer.appendChild(input);
+
+            let labelOptions = document.createElement("label");
+            labelOptions.innerHTML = quiz.quiz["q" + i].options[j];
+            mainContainer.appendChild(labelOptions);
+
+            let br = document.createElement("br");
+            mainContainer.appendChild(br);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
